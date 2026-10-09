@@ -1,49 +1,78 @@
 # DocMind AI
 
-A deployable GenAI document intelligence demo featuring PDF ingestion, embeddings-based retrieval (RAG), source-grounded Q&A, page references, and generated document insights.
+**AI-powered PDF Document Intelligence using Retrieval-Augmented Generation (RAG).**
+
+DocMind AI allows users to upload PDF documents, ask questions about their contents, retrieve relevant text passages, and generate document insights using locally hosted language models.
 
 ## Features
-- Upload one or more text-based PDFs
-- Extract page-level text and chunk it
-- Retrieve relevant passages with OpenAI embeddings
-- Ask questions and receive answers grounded in retrieved passages
-- Generate executive summaries, key findings, action items, and important dates
-- Download generated insights as text
-- No document database: uploaded content and embeddings stay in the app session
 
-## Run locally
-1. Install Python 3.10+.
-2. Create and activate a virtual environment.
-3. Install dependencies:
+- Upload and process PDF documents.
+- Extract text and split it into searchable chunks.
+- Generate embeddings using `nomic-embed-text`.
+- Retrieve relevant document passages using semantic similarity.
+- Answer questions using `llama3.2:3b`.
+- Generate insights from uploaded documents.
+- Display source-based responses to help users verify answers.
+- Run locally using Ollama without requiring an OpenAI API key.
+
+## Tech Stack
+
+- Python
+- Streamlit
+- Ollama
+- Llama 3.2
+- Nomic Embed Text
+- Retrieval-Augmented Generation (RAG)
+- NumPy
+- PyPDF
+
+## Run Locally
+
+1. Install Python 3.10 or later.
+2. Install [Ollama](https://ollama.com/).
+3. Download the required models:
+
+   ```bash
+   ollama pull llama3.2:3b
+   ollama pull nomic-embed-text
+   ```
+
+4. Install the project dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
-4. Set your API key:
-   - macOS/Linux: `export OPENAI_API_KEY="your-key"`
-   - Windows PowerShell: `$env:OPENAI_API_KEY="your-key"`
-5. Start the app:
+
+5. Start the application:
+
    ```bash
    streamlit run app.py
    ```
 
-## Deploy on Streamlit Community Cloud
-1. Push `app.py`, `requirements.txt`, and `README.md` to a GitHub repository.
-2. Create a new app at https://share.streamlit.io/ and select the repository and `app.py`.
-3. In app settings, add a secret:
-   ```toml
-   OPENAI_API_KEY = "your-key"
-   ```
-4. Deploy, open the public URL in a private/incognito window, and test with a sample PDF.
+Make sure Ollama is running before using the application.
 
-## Suggested live demo
-1. Upload a short research paper, annual report, or project brief.
-2. Ask: "What are the three main findings? Cite the pages."
-3. Ask a detail-specific question whose answer is present on a page near the end.
-4. Open the evidence panel and show the extracted passages.
-5. Generate an executive summary or action items.
+## Architecture
 
-## Current limitations
-- Text-based PDFs only; scanned PDFs need OCR.
-- The insight generator uses a bounded set of passages to keep the MVP fast.
-- Similarity scores are retrieval signals, not confidence probabilities.
-- Review generated output against the source document before relying on it.
+1. **PDF ingestion:** Extract text from uploaded documents.
+2. **Chunking:** Divide the extracted text into smaller passages.
+3. **Embedding generation:** Convert passages into numerical vectors.
+4. **Retrieval:** Find relevant passages using semantic similarity.
+5. **Answer generation:** Generate answers grounded in retrieved document content.
+
+## Limitations
+
+- Answer quality depends on the document content and the selected models.
+- Scanned PDFs may require OCR if they do not contain extractable text.
+- Models must be installed locally through Ollama.
+- Uploaded documents and embeddings are handled within the application session.
+
+## Future Improvements
+
+- Cloud deployment with hosted inference.
+- Improved document citation and retrieval evaluation.
+- Support for additional document formats.
+- Persistent document storage and multi-document search.
+
+## Author
+
+Developed as a Generative AI project demonstrating PDF processing, semantic search, and RAG-based question answering.
