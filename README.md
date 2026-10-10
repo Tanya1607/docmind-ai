@@ -1,78 +1,81 @@
 # DocMind AI
 
-**AI-powered PDF Document Intelligence using Retrieval-Augmented Generation (RAG).**
+**AI-powered PDF document intelligence using Retrieval-Augmented Generation (RAG).**
 
-DocMind AI allows users to upload PDF documents, ask questions about their contents, retrieve relevant text passages, and generate document insights using locally hosted language models.
+Upload PDF documents, ask questions about their contents, retrieve relevant passages, and generate document insights with page-level evidence.
 
 ## Features
 
-- Upload and process PDF documents.
-- Extract text and split it into searchable chunks.
-- Generate embeddings using `nomic-embed-text`.
-- Retrieve relevant document passages using semantic similarity.
-- Answer questions using `llama3.2:3b`.
-- Generate insights from uploaded documents.
-- Display source-based responses to help users verify answers.
-- Run locally using Ollama without requiring an OpenAI API key.
+- Upload one or more text-based PDFs
+- Extract page-level text and split it into passages
+- Generate local sentence embeddings using `sentence-transformers/all-MiniLM-L6-v2`
+- Retrieve relevant passages with cosine similarity
+- Ask evidence-grounded questions with source references
+- Generate executive summaries, key findings, action items, and important dates
+- Keep uploaded document text and embeddings in the current app session
 
-## Tech Stack
+## Tech stack
 
-- Python
-- Streamlit
-- Ollama
-- Llama 3.2
-- Nomic Embed Text
-- Retrieval-Augmented Generation (RAG)
-- NumPy
-- PyPDF
+Python · Streamlit · Groq API · Sentence Transformers · NumPy · PyPDF · RAG
 
-## Run Locally
+## Run locally
 
 1. Install Python 3.10 or later.
-2. Install [Ollama](https://ollama.com/).
-3. Download the required models:
-
-   ```bash
-   ollama pull llama3.2:3b
-   ollama pull nomic-embed-text
-   ```
-
-4. Install the project dependencies:
+2. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-5. Start the application:
+3. Create an API key at [Groq Console](https://console.groq.com/keys).
+4. Set the environment variable in Windows PowerShell:
+
+   ```powershell
+   $env:GROQ_API_KEY="your-groq-api-key"
+   ```
+
+5. Start the app:
 
    ```bash
    streamlit run app.py
    ```
 
-Make sure Ollama is running before using the application.
+## Deploy on Streamlit Community Cloud
+
+1. Push `app.py`, `requirements.txt`, and `README.md` to a GitHub repository.
+2. Create an app at [Streamlit Community Cloud](https://share.streamlit.io/) and select this repository, the `main` branch, and `app.py`.
+3. In the app's **Settings → Secrets**, add:
+
+   ```toml
+   GROQ_API_KEY = "your-groq-api-key"
+   GROQ_MODEL = "openai/gpt-oss-20b"
+   ```
+
+4. Deploy and test with a text-based PDF.
+
+Never commit API keys or `secrets.toml` to GitHub. Groq model availability and usage limits may change; check the [Groq supported models](https://console.groq.com/docs/models) page if a model ID is unavailable.
 
 ## Architecture
 
-1. **PDF ingestion:** Extract text from uploaded documents.
-2. **Chunking:** Divide the extracted text into smaller passages.
-3. **Embedding generation:** Convert passages into numerical vectors.
-4. **Retrieval:** Find relevant passages using semantic similarity.
-5. **Answer generation:** Generate answers grounded in retrieved document content.
+1. PDF ingestion and page-level text extraction
+2. Text chunking with overlap
+3. Sentence-transformer embeddings
+4. Similarity-based retrieval
+5. Hosted LLM response generation using retrieved evidence
 
 ## Limitations
 
-- Answer quality depends on the document content and the selected models.
-- Scanned PDFs may require OCR if they do not contain extractable text.
-- Models must be installed locally through Ollama.
-- Uploaded documents and embeddings are handled within the application session.
+- Scanned PDFs need OCR, which is not included.
+- Answer quality depends on the PDF content, retrieval quality, and selected model.
+- Hosted model requests are subject to the provider's availability, usage limits, and terms.
+- Uploaded files and embeddings are not stored in a persistent database.
 
-## Future Improvements
+## Future improvements
 
-- Cloud deployment with hosted inference.
-- Improved document citation and retrieval evaluation.
-- Support for additional document formats.
-- Persistent document storage and multi-document search.
+- Multi-format document support
+- Retrieval and answer quality evaluation
+- Persistent document storage and user workspaces
 
 ## Author
 
-Developed as a Generative AI project demonstrating PDF processing, semantic search, and RAG-based question answering.
+Built as a Generative AI demonstration project.
